@@ -317,6 +317,11 @@ class Brain(object):
         variable.
     views : list | str
         views to use
+    disable_offset : bool
+        If True, the surface locations in the figure will be exactly the
+        same as those in the surface files and not necessarily aligned
+        to the medial wall. This is useful to plot other subcortical 
+        overlays in the same figure.
     show_toolbar : bool
         If True, toolbars will be shown for each view.
     offscreen : bool
@@ -333,8 +338,8 @@ class Brain(object):
     def __init__(self, subject_id, hemi, surf, curv=True, title=None,
                  cortex="classic", size=800, background="black",
                  foreground="white", figure=None, subjects_dir=None,
-                 views=['lat'], show_toolbar=False, offscreen=False,
-                 config_opts=None):
+                 views=['lat'], disable_offset=False, show_toolbar=False, 
+                 offscreen=False, config_opts=None):
 
         # Keep backwards compatability
         if config_opts is not None:
@@ -370,7 +375,7 @@ class Brain(object):
         n_row = len(views)
 
         # load geometry for one or both hemispheres as necessary
-        offset = None if hemi != 'both' else 0.0
+        offset = None if (disable_offset or hemi != 'both') else 0.0
         self.geo = dict()
         if hemi in ['split', 'both']:
             geo_hemis = ['lh', 'rh']
